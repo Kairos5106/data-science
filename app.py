@@ -1,6 +1,37 @@
 import streamlit as st
 import pickle
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+# Page configuration
+st.set_page_config(
+    page_title="Phishing Site Detector",
+    layout="wide"
+)
+
+# CSS styling ------------------------------------------------------------------------------------------------------------
+st.markdown("""
+<style>
+            
+/* Align "Predict" button to the right */
+[data-testid="stButton"] {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Flex container for "Your input is..." and "Predict" button */
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# Model integration ------------------------------------------------------------------------------------------------------------
 # For debugging - display status on terminal
 def predict_website_status(user_input):
     try:
@@ -40,3 +71,12 @@ if result is not None:
         st.warning("This website is malicious!")
 else:
     st.error("Unable to predict the status of the website.")
+
+# Dashboard ---------------------------------------------------------------------------------------------------------------
+# Load the dataset
+phish_data = pd.read_csv('phishing_site_urls.csv')
+
+# Display the dataset DataFrame in a scrollable element
+st.write("### Dataset Used")
+st.write("Scroll through the dataset:")
+st.write(phish_data)

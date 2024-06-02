@@ -1,7 +1,7 @@
 # Phishing Site Detector
 
 ## Description
-The Phishing Site Detector is a machine learning application that identifies malicious websites from their URLs. It uses a logistic regression model with an accuracy of around 96.6%.
+The Phishing Site Detector is a machine learning application that identifies malicious websites from their URLs. It uses a logistic regression model with an accuracy of around 96%.
 
 ## Installation
 To install the Phishing URL Detector, follow these steps:
