@@ -94,7 +94,7 @@ with row1_col[1]:
     st.metric(label="Good URL", value=num_good_urls, delta=None)
 
 # Row 2
-row2_col = st.columns((7, 2, 3), gap='medium')
+row2_col = st.columns((7, 1, 4), gap='medium')
 
 with row2_col[0]:
     # TLD information
