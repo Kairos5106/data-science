@@ -94,7 +94,7 @@ with row1_col[1]:
     st.metric(label="Good URL", value=num_good_urls, delta=None)
 
 # Row 2
-row2_col = st.columns((8, 4), gap='medium')
+row2_col = st.columns((7, 2, 3), gap='medium')
 
 with row2_col[0]:
     # TLD information
@@ -134,7 +134,7 @@ with row2_col[0]:
     plt.legend()
     st.pyplot(plt)
 
-with row2_col[1]:
+with row2_col[2]:
     st.write("### URL Length Statistics")
 
     # Calculate URL length statistics
