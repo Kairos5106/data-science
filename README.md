@@ -14,5 +14,4 @@ To install the Phishing URL Detector, follow these steps:
 2. Input a website link into the text box.
 3. Click the "Predict" button to check if the website is safe or malicious.
 
-![alt text](image.png)
-![alt text](image-1.png)
+<video controls src="demo.mp4" title="Website Demo"></video>
