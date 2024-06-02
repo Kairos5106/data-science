@@ -1,0 +1,8 @@
+# to run streamlit app locally
+# assuming already have streamlit installed and requirements.txt created 
+
+# in vs code terminal
+pip install -r requirements.txt
+
+# then
+streamlit run app.py
