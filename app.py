@@ -3,6 +3,7 @@ import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import string
 
 # Page configuration
 st.set_page_config(
@@ -18,6 +19,7 @@ st.markdown("""
     background-color: #e8e9eb;
     text-align: center;
     padding: 15px 0;
+    border: 1px solid #000;
 }
             
 [data-testid="stMetricLabel"] {
@@ -94,7 +96,7 @@ with row1_col[1]:
     st.metric(label="Good URL", value=num_good_urls, delta=None)
 
 # Row 2
-row2_col = st.columns((7, 1, 4), gap='medium')
+row2_col = st.columns((6, 5), gap='medium')
 
 with row2_col[0]:
     # TLD information
@@ -115,6 +117,7 @@ with row2_col[0]:
     plt.legend()
     st.pyplot(plt)
 
+with row2_col[1]:
     # Keyword Frequency in Phishing and Legitimate URLs
     st.write("### Keyword Frequency in Phishing and Legitimate URLs")
     def count_keywords(urls, keyword):
@@ -134,9 +137,10 @@ with row2_col[0]:
     plt.legend()
     st.pyplot(plt)
 
-with row2_col[2]:
-    st.write("### URL Length Statistics")
+# Row 3
+row3_col = st.columns((3, 3.5, 6), gap='medium')
 
+with row3_col[0]:
     # Calculate URL length statistics
     url_length_stats = phish_data.groupby('Label')['URL'].apply(lambda x: x.str.len().describe()).unstack()
 
@@ -149,7 +153,7 @@ with row2_col[2]:
     df_good = pd.DataFrame(url_length_stats_good).reset_index().rename(columns={'index': 'Statistic', 'good': 'Value'})
     
     # Display the statistics for bad URLs
-    st.write("##### Bad URLs Statistics")
+    st.write("### Bad URL Statistics")
     st.dataframe(df_bad,
                  column_order=("Statistic", "Value"),
                  hide_index=True,
@@ -158,9 +162,10 @@ with row2_col[2]:
                     "Statistic": st.column_config.TextColumn("Statistic"),
                     "Value": st.column_config.NumberColumn("Value", format="%f")
                  })
-    
+
+with row3_col[1]:
     # Display the statistics for good URLs
-    st.write("##### Good URLs Statistics")
+    st.write("### Good URL Statistics")
     st.dataframe(df_good,
                  column_order=("Statistic", "Value"),
                  hide_index=True,
@@ -169,3 +174,32 @@ with row2_col[2]:
                     "Statistic": st.column_config.TextColumn("Statistic"),
                     "Value": st.column_config.NumberColumn("Value", format="%f")
                  })
+
+with row3_col[2]:
+    # Define function to count special characters in a URL
+    def count_special_characters(url):
+        special_characters = set(string.punctuation)  # All special characters
+        return sum(1 for char in url if char in special_characters)
+
+    # Count special characters in phishing and legitimate URLs
+    phish_data['special_char_count'] = phish_data['URL'].apply(count_special_characters)
+    special_char_counts_phishing = phish_data[phish_data['Label'] == 'bad']['special_char_count']
+    special_char_counts_legitimate = phish_data[phish_data['Label'] == 'good']['special_char_count']
+
+    # Compare the mean special character count between phishing and legitimate URLs
+    mean_special_char_count_phishing = special_char_counts_phishing.mean()
+    mean_special_char_count_legitimate = special_char_counts_legitimate.mean()
+
+    st.write("### Mean Special Character Count")
+    # Create a bar plot to compare mean special character count for phishing and legitimate URLs
+    plt.figure(figsize=(8, 5))
+    bars = plt.bar(['Phishing', 'Legitimate'], [mean_special_char_count_phishing, mean_special_char_count_legitimate], color=['red', 'blue'])
+    plt.xlabel('Label')
+    plt.ylabel('Mean Special Character Count')
+    
+    # Annotate the bar chart with the mean values
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval + 0.05, round(yval, 2), ha='center', va='bottom')
+
+    st.pyplot(plt)
